@@ -86,6 +86,8 @@ type PluginRequest struct {
 	//	*PluginRequest_Health
 	//	*PluginRequest_ToolCall
 	//	*PluginRequest_ListTools
+	//	*PluginRequest_ListPrompts
+	//	*PluginRequest_PromptGet
 	//	*PluginRequest_StorageRead
 	//	*PluginRequest_StorageWrite
 	//	*PluginRequest_StorageDelete
@@ -193,6 +195,24 @@ func (x *PluginRequest) GetListTools() *ListToolsRequest {
 	return nil
 }
 
+func (x *PluginRequest) GetListPrompts() *ListPromptsRequest {
+	if x != nil {
+		if x, ok := x.Request.(*PluginRequest_ListPrompts); ok {
+			return x.ListPrompts
+		}
+	}
+	return nil
+}
+
+func (x *PluginRequest) GetPromptGet() *PromptGetRequest {
+	if x != nil {
+		if x, ok := x.Request.(*PluginRequest_PromptGet); ok {
+			return x.PromptGet
+		}
+	}
+	return nil
+}
+
 func (x *PluginRequest) GetStorageRead() *StorageReadRequest {
 	if x != nil {
 		if x, ok := x.Request.(*PluginRequest_StorageRead); ok {
@@ -259,6 +279,15 @@ type PluginRequest_ListTools struct {
 	ListTools *ListToolsRequest `protobuf:"bytes,21,opt,name=list_tools,json=listTools,proto3,oneof"`
 }
 
+type PluginRequest_ListPrompts struct {
+	// Prompts
+	ListPrompts *ListPromptsRequest `protobuf:"bytes,22,opt,name=list_prompts,json=listPrompts,proto3,oneof"`
+}
+
+type PluginRequest_PromptGet struct {
+	PromptGet *PromptGetRequest `protobuf:"bytes,23,opt,name=prompt_get,json=promptGet,proto3,oneof"`
+}
+
 type PluginRequest_StorageRead struct {
 	// Storage
 	StorageRead *StorageReadRequest `protobuf:"bytes,30,opt,name=storage_read,json=storageRead,proto3,oneof"`
@@ -288,6 +317,10 @@ func (*PluginRequest_ToolCall) isPluginRequest_Request() {}
 
 func (*PluginRequest_ListTools) isPluginRequest_Request() {}
 
+func (*PluginRequest_ListPrompts) isPluginRequest_Request() {}
+
+func (*PluginRequest_PromptGet) isPluginRequest_Request() {}
+
 func (*PluginRequest_StorageRead) isPluginRequest_Request() {}
 
 func (*PluginRequest_StorageWrite) isPluginRequest_Request() {}
@@ -307,6 +340,8 @@ type PluginResponse struct {
 	//	*PluginResponse_Health
 	//	*PluginResponse_ToolCall
 	//	*PluginResponse_ListTools
+	//	*PluginResponse_ListPrompts
+	//	*PluginResponse_PromptGet
 	//	*PluginResponse_StorageRead
 	//	*PluginResponse_StorageWrite
 	//	*PluginResponse_StorageDelete
@@ -414,6 +449,24 @@ func (x *PluginResponse) GetListTools() *ListToolsResponse {
 	return nil
 }
 
+func (x *PluginResponse) GetListPrompts() *ListPromptsResponse {
+	if x != nil {
+		if x, ok := x.Response.(*PluginResponse_ListPrompts); ok {
+			return x.ListPrompts
+		}
+	}
+	return nil
+}
+
+func (x *PluginResponse) GetPromptGet() *PromptGetResponse {
+	if x != nil {
+		if x, ok := x.Response.(*PluginResponse_PromptGet); ok {
+			return x.PromptGet
+		}
+	}
+	return nil
+}
+
 func (x *PluginResponse) GetStorageRead() *StorageReadResponse {
 	if x != nil {
 		if x, ok := x.Response.(*PluginResponse_StorageRead); ok {
@@ -480,6 +533,15 @@ type PluginResponse_ListTools struct {
 	ListTools *ListToolsResponse `protobuf:"bytes,21,opt,name=list_tools,json=listTools,proto3,oneof"`
 }
 
+type PluginResponse_ListPrompts struct {
+	// Prompts
+	ListPrompts *ListPromptsResponse `protobuf:"bytes,22,opt,name=list_prompts,json=listPrompts,proto3,oneof"`
+}
+
+type PluginResponse_PromptGet struct {
+	PromptGet *PromptGetResponse `protobuf:"bytes,23,opt,name=prompt_get,json=promptGet,proto3,oneof"`
+}
+
 type PluginResponse_StorageRead struct {
 	// Storage
 	StorageRead *StorageReadResponse `protobuf:"bytes,30,opt,name=storage_read,json=storageRead,proto3,oneof"`
@@ -509,6 +571,10 @@ func (*PluginResponse_ToolCall) isPluginResponse_Response() {}
 
 func (*PluginResponse_ListTools) isPluginResponse_Response() {}
 
+func (*PluginResponse_ListPrompts) isPluginResponse_Response() {}
+
+func (*PluginResponse_PromptGet) isPluginResponse_Response() {}
+
 func (*PluginResponse_StorageRead) isPluginResponse_Response() {}
 
 func (*PluginResponse_StorageWrite) isPluginResponse_Response() {}
@@ -534,13 +600,14 @@ type PluginManifest struct {
 	NeedsAi      []string `protobuf:"bytes,11,rep,name=needs_ai,json=needsAi,proto3" json:"needs_ai,omitempty"`
 	NeedsTools   []string `protobuf:"bytes,12,rep,name=needs_tools,json=needsTools,proto3" json:"needs_tools,omitempty"`
 	// Metadata
-	Description   string            `protobuf:"bytes,13,opt,name=description,proto3" json:"description,omitempty"`
-	Author        string            `protobuf:"bytes,14,opt,name=author,proto3" json:"author,omitempty"`
-	Binary        string            `protobuf:"bytes,15,opt,name=binary,proto3" json:"binary,omitempty"`
-	Args          []string          `protobuf:"bytes,16,rep,name=args,proto3" json:"args,omitempty"`
-	Env           map[string]string `protobuf:"bytes,17,rep,name=env,proto3" json:"env,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Description     string            `protobuf:"bytes,13,opt,name=description,proto3" json:"description,omitempty"`
+	Author          string            `protobuf:"bytes,14,opt,name=author,proto3" json:"author,omitempty"`
+	Binary          string            `protobuf:"bytes,15,opt,name=binary,proto3" json:"binary,omitempty"`
+	Args            []string          `protobuf:"bytes,16,rep,name=args,proto3" json:"args,omitempty"`
+	Env             map[string]string `protobuf:"bytes,17,rep,name=env,proto3" json:"env,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	ProvidesPrompts []string          `protobuf:"bytes,18,rep,name=provides_prompts,json=providesPrompts,proto3" json:"provides_prompts,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *PluginManifest) Reset() {
@@ -688,6 +755,13 @@ func (x *PluginManifest) GetArgs() []string {
 func (x *PluginManifest) GetEnv() map[string]string {
 	if x != nil {
 		return x.Env
+	}
+	return nil
+}
+
+func (x *PluginManifest) GetProvidesPrompts() []string {
+	if x != nil {
+		return x.ProvidesPrompts
 	}
 	return nil
 }
@@ -1300,6 +1374,414 @@ func (x *ToolDefinition) GetInputSchema() *structpb.Struct {
 	return nil
 }
 
+type PromptGetRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PromptName    string                 `protobuf:"bytes,1,opt,name=prompt_name,json=promptName,proto3" json:"prompt_name,omitempty"`
+	Arguments     map[string]string      `protobuf:"bytes,2,rep,name=arguments,proto3" json:"arguments,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PromptGetRequest) Reset() {
+	*x = PromptGetRequest{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PromptGetRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PromptGetRequest) ProtoMessage() {}
+
+func (x *PromptGetRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PromptGetRequest.ProtoReflect.Descriptor instead.
+func (*PromptGetRequest) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *PromptGetRequest) GetPromptName() string {
+	if x != nil {
+		return x.PromptName
+	}
+	return ""
+}
+
+func (x *PromptGetRequest) GetArguments() map[string]string {
+	if x != nil {
+		return x.Arguments
+	}
+	return nil
+}
+
+type PromptGetResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Description   string                 `protobuf:"bytes,1,opt,name=description,proto3" json:"description,omitempty"`
+	Messages      []*PromptMessage       `protobuf:"bytes,2,rep,name=messages,proto3" json:"messages,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PromptGetResponse) Reset() {
+	*x = PromptGetResponse{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PromptGetResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PromptGetResponse) ProtoMessage() {}
+
+func (x *PromptGetResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PromptGetResponse.ProtoReflect.Descriptor instead.
+func (*PromptGetResponse) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *PromptGetResponse) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *PromptGetResponse) GetMessages() []*PromptMessage {
+	if x != nil {
+		return x.Messages
+	}
+	return nil
+}
+
+type ListPromptsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListPromptsRequest) Reset() {
+	*x = ListPromptsRequest{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListPromptsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListPromptsRequest) ProtoMessage() {}
+
+func (x *ListPromptsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListPromptsRequest.ProtoReflect.Descriptor instead.
+func (*ListPromptsRequest) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{17}
+}
+
+type ListPromptsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Prompts       []*PromptDefinition    `protobuf:"bytes,1,rep,name=prompts,proto3" json:"prompts,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListPromptsResponse) Reset() {
+	*x = ListPromptsResponse{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListPromptsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListPromptsResponse) ProtoMessage() {}
+
+func (x *ListPromptsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListPromptsResponse.ProtoReflect.Descriptor instead.
+func (*ListPromptsResponse) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *ListPromptsResponse) GetPrompts() []*PromptDefinition {
+	if x != nil {
+		return x.Prompts
+	}
+	return nil
+}
+
+type PromptDefinition struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	Arguments     []*PromptArgument      `protobuf:"bytes,3,rep,name=arguments,proto3" json:"arguments,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PromptDefinition) Reset() {
+	*x = PromptDefinition{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PromptDefinition) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PromptDefinition) ProtoMessage() {}
+
+func (x *PromptDefinition) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PromptDefinition.ProtoReflect.Descriptor instead.
+func (*PromptDefinition) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *PromptDefinition) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *PromptDefinition) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *PromptDefinition) GetArguments() []*PromptArgument {
+	if x != nil {
+		return x.Arguments
+	}
+	return nil
+}
+
+type PromptArgument struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	Required      bool                   `protobuf:"varint,3,opt,name=required,proto3" json:"required,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PromptArgument) Reset() {
+	*x = PromptArgument{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PromptArgument) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PromptArgument) ProtoMessage() {}
+
+func (x *PromptArgument) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PromptArgument.ProtoReflect.Descriptor instead.
+func (*PromptArgument) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *PromptArgument) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *PromptArgument) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *PromptArgument) GetRequired() bool {
+	if x != nil {
+		return x.Required
+	}
+	return false
+}
+
+type PromptMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Role          string                 `protobuf:"bytes,1,opt,name=role,proto3" json:"role,omitempty"` // "user", "assistant"
+	Content       *ContentBlock          `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PromptMessage) Reset() {
+	*x = PromptMessage{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PromptMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PromptMessage) ProtoMessage() {}
+
+func (x *PromptMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PromptMessage.ProtoReflect.Descriptor instead.
+func (*PromptMessage) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *PromptMessage) GetRole() string {
+	if x != nil {
+		return x.Role
+	}
+	return ""
+}
+
+func (x *PromptMessage) GetContent() *ContentBlock {
+	if x != nil {
+		return x.Content
+	}
+	return nil
+}
+
+type ContentBlock struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Type          string                 `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"` // "text", "resource"
+	Text          string                 `protobuf:"bytes,2,opt,name=text,proto3" json:"text,omitempty"` // for type="text"
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ContentBlock) Reset() {
+	*x = ContentBlock{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ContentBlock) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ContentBlock) ProtoMessage() {}
+
+func (x *ContentBlock) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ContentBlock.ProtoReflect.Descriptor instead.
+func (*ContentBlock) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *ContentBlock) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *ContentBlock) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
 type StorageReadRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Path          string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`                                  // "projects/my-app/features/FEAT-001.md"
@@ -1310,7 +1792,7 @@ type StorageReadRequest struct {
 
 func (x *StorageReadRequest) Reset() {
 	*x = StorageReadRequest{}
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[15]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1322,7 +1804,7 @@ func (x *StorageReadRequest) String() string {
 func (*StorageReadRequest) ProtoMessage() {}
 
 func (x *StorageReadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[15]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1335,7 +1817,7 @@ func (x *StorageReadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StorageReadRequest.ProtoReflect.Descriptor instead.
 func (*StorageReadRequest) Descriptor() ([]byte, []int) {
-	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{15}
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *StorageReadRequest) GetPath() string {
@@ -1363,7 +1845,7 @@ type StorageReadResponse struct {
 
 func (x *StorageReadResponse) Reset() {
 	*x = StorageReadResponse{}
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[16]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1375,7 +1857,7 @@ func (x *StorageReadResponse) String() string {
 func (*StorageReadResponse) ProtoMessage() {}
 
 func (x *StorageReadResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[16]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1388,7 +1870,7 @@ func (x *StorageReadResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StorageReadResponse.ProtoReflect.Descriptor instead.
 func (*StorageReadResponse) Descriptor() ([]byte, []int) {
-	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{16}
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *StorageReadResponse) GetContent() []byte {
@@ -1425,7 +1907,7 @@ type StorageWriteRequest struct {
 
 func (x *StorageWriteRequest) Reset() {
 	*x = StorageWriteRequest{}
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[17]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1437,7 +1919,7 @@ func (x *StorageWriteRequest) String() string {
 func (*StorageWriteRequest) ProtoMessage() {}
 
 func (x *StorageWriteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[17]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1450,7 +1932,7 @@ func (x *StorageWriteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StorageWriteRequest.ProtoReflect.Descriptor instead.
 func (*StorageWriteRequest) Descriptor() ([]byte, []int) {
-	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{17}
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *StorageWriteRequest) GetPath() string {
@@ -1499,7 +1981,7 @@ type StorageWriteResponse struct {
 
 func (x *StorageWriteResponse) Reset() {
 	*x = StorageWriteResponse{}
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[18]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1511,7 +1993,7 @@ func (x *StorageWriteResponse) String() string {
 func (*StorageWriteResponse) ProtoMessage() {}
 
 func (x *StorageWriteResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[18]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1524,7 +2006,7 @@ func (x *StorageWriteResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StorageWriteResponse.ProtoReflect.Descriptor instead.
 func (*StorageWriteResponse) Descriptor() ([]byte, []int) {
-	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{18}
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *StorageWriteResponse) GetSuccess() bool {
@@ -1558,7 +2040,7 @@ type StorageDeleteRequest struct {
 
 func (x *StorageDeleteRequest) Reset() {
 	*x = StorageDeleteRequest{}
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[19]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1570,7 +2052,7 @@ func (x *StorageDeleteRequest) String() string {
 func (*StorageDeleteRequest) ProtoMessage() {}
 
 func (x *StorageDeleteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[19]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1583,7 +2065,7 @@ func (x *StorageDeleteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StorageDeleteRequest.ProtoReflect.Descriptor instead.
 func (*StorageDeleteRequest) Descriptor() ([]byte, []int) {
-	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{19}
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *StorageDeleteRequest) GetPath() string {
@@ -1609,7 +2091,7 @@ type StorageDeleteResponse struct {
 
 func (x *StorageDeleteResponse) Reset() {
 	*x = StorageDeleteResponse{}
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[20]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1621,7 +2103,7 @@ func (x *StorageDeleteResponse) String() string {
 func (*StorageDeleteResponse) ProtoMessage() {}
 
 func (x *StorageDeleteResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[20]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1634,7 +2116,7 @@ func (x *StorageDeleteResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StorageDeleteResponse.ProtoReflect.Descriptor instead.
 func (*StorageDeleteResponse) Descriptor() ([]byte, []int) {
-	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{20}
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *StorageDeleteResponse) GetSuccess() bool {
@@ -1655,7 +2137,7 @@ type StorageListRequest struct {
 
 func (x *StorageListRequest) Reset() {
 	*x = StorageListRequest{}
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[21]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1667,7 +2149,7 @@ func (x *StorageListRequest) String() string {
 func (*StorageListRequest) ProtoMessage() {}
 
 func (x *StorageListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[21]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1680,7 +2162,7 @@ func (x *StorageListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StorageListRequest.ProtoReflect.Descriptor instead.
 func (*StorageListRequest) Descriptor() ([]byte, []int) {
-	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{21}
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *StorageListRequest) GetPrefix() string {
@@ -1713,7 +2195,7 @@ type StorageListResponse struct {
 
 func (x *StorageListResponse) Reset() {
 	*x = StorageListResponse{}
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[22]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1725,7 +2207,7 @@ func (x *StorageListResponse) String() string {
 func (*StorageListResponse) ProtoMessage() {}
 
 func (x *StorageListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[22]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1738,7 +2220,7 @@ func (x *StorageListResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StorageListResponse.ProtoReflect.Descriptor instead.
 func (*StorageListResponse) Descriptor() ([]byte, []int) {
-	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{22}
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *StorageListResponse) GetEntries() []*StorageEntry {
@@ -1760,7 +2242,7 @@ type StorageEntry struct {
 
 func (x *StorageEntry) Reset() {
 	*x = StorageEntry{}
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[23]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1772,7 +2254,7 @@ func (x *StorageEntry) String() string {
 func (*StorageEntry) ProtoMessage() {}
 
 func (x *StorageEntry) ProtoReflect() protoreflect.Message {
-	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[23]
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1785,7 +2267,7 @@ func (x *StorageEntry) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StorageEntry.ProtoReflect.Descriptor instead.
 func (*StorageEntry) Descriptor() ([]byte, []int) {
-	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{23}
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *StorageEntry) GetPath() string {
@@ -1820,7 +2302,7 @@ var File_orchestra_plugin_v1_plugin_proto protoreflect.FileDescriptor
 
 const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\n" +
-	" orchestra/plugin/v1/plugin.proto\x12\x13orchestra.plugin.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x80\x06\n" +
+	" orchestra/plugin/v1/plugin.proto\x12\x13orchestra.plugin.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x96\a\n" +
 	"\rPluginRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12A\n" +
@@ -1832,11 +2314,14 @@ const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\ttool_call\x18\x14 \x01(\v2 .orchestra.plugin.v1.ToolRequestH\x00R\btoolCall\x12F\n" +
 	"\n" +
 	"list_tools\x18\x15 \x01(\v2%.orchestra.plugin.v1.ListToolsRequestH\x00R\tlistTools\x12L\n" +
+	"\flist_prompts\x18\x16 \x01(\v2'.orchestra.plugin.v1.ListPromptsRequestH\x00R\vlistPrompts\x12F\n" +
+	"\n" +
+	"prompt_get\x18\x17 \x01(\v2%.orchestra.plugin.v1.PromptGetRequestH\x00R\tpromptGet\x12L\n" +
 	"\fstorage_read\x18\x1e \x01(\v2'.orchestra.plugin.v1.StorageReadRequestH\x00R\vstorageRead\x12O\n" +
 	"\rstorage_write\x18\x1f \x01(\v2(.orchestra.plugin.v1.StorageWriteRequestH\x00R\fstorageWrite\x12R\n" +
 	"\x0estorage_delete\x18  \x01(\v2).orchestra.plugin.v1.StorageDeleteRequestH\x00R\rstorageDelete\x12L\n" +
 	"\fstorage_list\x18! \x01(\v2'.orchestra.plugin.v1.StorageListRequestH\x00R\vstorageListB\t\n" +
-	"\arequest\"\x89\x06\n" +
+	"\arequest\"\xa1\a\n" +
 	"\x0ePluginResponse\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12E\n" +
@@ -1848,12 +2333,15 @@ const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\ttool_call\x18\x14 \x01(\v2!.orchestra.plugin.v1.ToolResponseH\x00R\btoolCall\x12G\n" +
 	"\n" +
 	"list_tools\x18\x15 \x01(\v2&.orchestra.plugin.v1.ListToolsResponseH\x00R\tlistTools\x12M\n" +
+	"\flist_prompts\x18\x16 \x01(\v2(.orchestra.plugin.v1.ListPromptsResponseH\x00R\vlistPrompts\x12G\n" +
+	"\n" +
+	"prompt_get\x18\x17 \x01(\v2&.orchestra.plugin.v1.PromptGetResponseH\x00R\tpromptGet\x12M\n" +
 	"\fstorage_read\x18\x1e \x01(\v2(.orchestra.plugin.v1.StorageReadResponseH\x00R\vstorageRead\x12P\n" +
 	"\rstorage_write\x18\x1f \x01(\v2).orchestra.plugin.v1.StorageWriteResponseH\x00R\fstorageWrite\x12S\n" +
 	"\x0estorage_delete\x18  \x01(\v2*.orchestra.plugin.v1.StorageDeleteResponseH\x00R\rstorageDelete\x12M\n" +
 	"\fstorage_list\x18! \x01(\v2(.orchestra.plugin.v1.StorageListResponseH\x00R\vstorageListB\n" +
 	"\n" +
-	"\bresponse\"\x83\x05\n" +
+	"\bresponse\"\xae\x05\n" +
 	"\x0ePluginManifest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x1a\n" +
@@ -1874,7 +2362,8 @@ const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\x06author\x18\x0e \x01(\tR\x06author\x12\x16\n" +
 	"\x06binary\x18\x0f \x01(\tR\x06binary\x12\x12\n" +
 	"\x04args\x18\x10 \x03(\tR\x04args\x12>\n" +
-	"\x03env\x18\x11 \x03(\v2,.orchestra.plugin.v1.PluginManifest.EnvEntryR\x03env\x1a6\n" +
+	"\x03env\x18\x11 \x03(\v2,.orchestra.plugin.v1.PluginManifest.EnvEntryR\x03env\x12)\n" +
+	"\x10provides_prompts\x18\x12 \x03(\tR\x0fprovidesPrompts\x1a6\n" +
 	"\bEnvEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"U\n" +
@@ -1924,7 +2413,34 @@ const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\x0eToolDefinition\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12:\n" +
-	"\finput_schema\x18\x03 \x01(\v2\x17.google.protobuf.StructR\vinputSchema\"K\n" +
+	"\finput_schema\x18\x03 \x01(\v2\x17.google.protobuf.StructR\vinputSchema\"\xc5\x01\n" +
+	"\x10PromptGetRequest\x12\x1f\n" +
+	"\vprompt_name\x18\x01 \x01(\tR\n" +
+	"promptName\x12R\n" +
+	"\targuments\x18\x02 \x03(\v24.orchestra.plugin.v1.PromptGetRequest.ArgumentsEntryR\targuments\x1a<\n" +
+	"\x0eArgumentsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"u\n" +
+	"\x11PromptGetResponse\x12 \n" +
+	"\vdescription\x18\x01 \x01(\tR\vdescription\x12>\n" +
+	"\bmessages\x18\x02 \x03(\v2\".orchestra.plugin.v1.PromptMessageR\bmessages\"\x14\n" +
+	"\x12ListPromptsRequest\"V\n" +
+	"\x13ListPromptsResponse\x12?\n" +
+	"\aprompts\x18\x01 \x03(\v2%.orchestra.plugin.v1.PromptDefinitionR\aprompts\"\x8b\x01\n" +
+	"\x10PromptDefinition\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\x12A\n" +
+	"\targuments\x18\x03 \x03(\v2#.orchestra.plugin.v1.PromptArgumentR\targuments\"b\n" +
+	"\x0ePromptArgument\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x1a\n" +
+	"\brequired\x18\x03 \x01(\bR\brequired\"`\n" +
+	"\rPromptMessage\x12\x12\n" +
+	"\x04role\x18\x01 \x01(\tR\x04role\x12;\n" +
+	"\acontent\x18\x02 \x01(\v2!.orchestra.plugin.v1.ContentBlockR\acontent\"6\n" +
+	"\fContentBlock\x12\x12\n" +
+	"\x04type\x18\x01 \x01(\tR\x04type\x12\x12\n" +
+	"\x04text\x18\x02 \x01(\tR\x04text\"K\n" +
 	"\x12StorageReadRequest\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\x12!\n" +
 	"\fstorage_type\x18\x02 \x01(\tR\vstorageType\"~\n" +
@@ -1959,8 +2475,8 @@ const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\x04size\x18\x02 \x01(\x03R\x04size\x12\x18\n" +
 	"\aversion\x18\x03 \x01(\x03R\aversion\x12;\n" +
 	"\vmodified_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"modifiedAtB\xdf\x01\n" +
-	"\x17com.orchestra.plugin.v1B\vPluginProtoP\x01ZIgithub.com/orchestrated-mcp/framework/gen/go/orchestra/plugin/v1;pluginv1\xa2\x02\x03OPX\xaa\x02\x13Orchestra.Plugin.V1\xca\x02\x13Orchestra\\Plugin\\V1\xe2\x02\x1fOrchestra\\Plugin\\V1\\GPBMetadata\xea\x02\x15Orchestra::Plugin::V1b\x06proto3"
+	"modifiedAtB\xd2\x01\n" +
+	"\x17com.orchestra.plugin.v1B\vPluginProtoP\x01Z<github.com/orchestra-mcp/gen-go/orchestra/plugin/v1;pluginv1\xa2\x02\x03OPX\xaa\x02\x13Orchestra.Plugin.V1\xca\x02\x13Orchestra\\Plugin\\V1\xe2\x02\x1fOrchestra\\Plugin\\V1\\GPBMetadata\xea\x02\x15Orchestra::Plugin::V1b\x06proto3"
 
 var (
 	file_orchestra_plugin_v1_plugin_proto_rawDescOnce sync.Once
@@ -1975,7 +2491,7 @@ func file_orchestra_plugin_v1_plugin_proto_rawDescGZIP() []byte {
 }
 
 var file_orchestra_plugin_v1_plugin_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_orchestra_plugin_v1_plugin_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
+var file_orchestra_plugin_v1_plugin_proto_msgTypes = make([]protoimpl.MessageInfo, 36)
 var file_orchestra_plugin_v1_plugin_proto_goTypes = []any{
 	(HealthResult_Status)(0),      // 0: orchestra.plugin.v1.HealthResult.Status
 	(*PluginRequest)(nil),         // 1: orchestra.plugin.v1.PluginRequest
@@ -1993,20 +2509,29 @@ var file_orchestra_plugin_v1_plugin_proto_goTypes = []any{
 	(*ListToolsRequest)(nil),      // 13: orchestra.plugin.v1.ListToolsRequest
 	(*ListToolsResponse)(nil),     // 14: orchestra.plugin.v1.ListToolsResponse
 	(*ToolDefinition)(nil),        // 15: orchestra.plugin.v1.ToolDefinition
-	(*StorageReadRequest)(nil),    // 16: orchestra.plugin.v1.StorageReadRequest
-	(*StorageReadResponse)(nil),   // 17: orchestra.plugin.v1.StorageReadResponse
-	(*StorageWriteRequest)(nil),   // 18: orchestra.plugin.v1.StorageWriteRequest
-	(*StorageWriteResponse)(nil),  // 19: orchestra.plugin.v1.StorageWriteResponse
-	(*StorageDeleteRequest)(nil),  // 20: orchestra.plugin.v1.StorageDeleteRequest
-	(*StorageDeleteResponse)(nil), // 21: orchestra.plugin.v1.StorageDeleteResponse
-	(*StorageListRequest)(nil),    // 22: orchestra.plugin.v1.StorageListRequest
-	(*StorageListResponse)(nil),   // 23: orchestra.plugin.v1.StorageListResponse
-	(*StorageEntry)(nil),          // 24: orchestra.plugin.v1.StorageEntry
-	nil,                           // 25: orchestra.plugin.v1.PluginManifest.EnvEntry
-	nil,                           // 26: orchestra.plugin.v1.BootRequest.ConfigEntry
-	nil,                           // 27: orchestra.plugin.v1.HealthResult.DetailsEntry
-	(*structpb.Struct)(nil),       // 28: google.protobuf.Struct
-	(*timestamppb.Timestamp)(nil), // 29: google.protobuf.Timestamp
+	(*PromptGetRequest)(nil),      // 16: orchestra.plugin.v1.PromptGetRequest
+	(*PromptGetResponse)(nil),     // 17: orchestra.plugin.v1.PromptGetResponse
+	(*ListPromptsRequest)(nil),    // 18: orchestra.plugin.v1.ListPromptsRequest
+	(*ListPromptsResponse)(nil),   // 19: orchestra.plugin.v1.ListPromptsResponse
+	(*PromptDefinition)(nil),      // 20: orchestra.plugin.v1.PromptDefinition
+	(*PromptArgument)(nil),        // 21: orchestra.plugin.v1.PromptArgument
+	(*PromptMessage)(nil),         // 22: orchestra.plugin.v1.PromptMessage
+	(*ContentBlock)(nil),          // 23: orchestra.plugin.v1.ContentBlock
+	(*StorageReadRequest)(nil),    // 24: orchestra.plugin.v1.StorageReadRequest
+	(*StorageReadResponse)(nil),   // 25: orchestra.plugin.v1.StorageReadResponse
+	(*StorageWriteRequest)(nil),   // 26: orchestra.plugin.v1.StorageWriteRequest
+	(*StorageWriteResponse)(nil),  // 27: orchestra.plugin.v1.StorageWriteResponse
+	(*StorageDeleteRequest)(nil),  // 28: orchestra.plugin.v1.StorageDeleteRequest
+	(*StorageDeleteResponse)(nil), // 29: orchestra.plugin.v1.StorageDeleteResponse
+	(*StorageListRequest)(nil),    // 30: orchestra.plugin.v1.StorageListRequest
+	(*StorageListResponse)(nil),   // 31: orchestra.plugin.v1.StorageListResponse
+	(*StorageEntry)(nil),          // 32: orchestra.plugin.v1.StorageEntry
+	nil,                           // 33: orchestra.plugin.v1.PluginManifest.EnvEntry
+	nil,                           // 34: orchestra.plugin.v1.BootRequest.ConfigEntry
+	nil,                           // 35: orchestra.plugin.v1.HealthResult.DetailsEntry
+	nil,                           // 36: orchestra.plugin.v1.PromptGetRequest.ArgumentsEntry
+	(*structpb.Struct)(nil),       // 37: google.protobuf.Struct
+	(*timestamppb.Timestamp)(nil), // 38: google.protobuf.Timestamp
 }
 var file_orchestra_plugin_v1_plugin_proto_depIdxs = []int32{
 	3,  // 0: orchestra.plugin.v1.PluginRequest.register:type_name -> orchestra.plugin.v1.PluginManifest
@@ -2015,37 +2540,46 @@ var file_orchestra_plugin_v1_plugin_proto_depIdxs = []int32{
 	9,  // 3: orchestra.plugin.v1.PluginRequest.health:type_name -> orchestra.plugin.v1.HealthRequest
 	11, // 4: orchestra.plugin.v1.PluginRequest.tool_call:type_name -> orchestra.plugin.v1.ToolRequest
 	13, // 5: orchestra.plugin.v1.PluginRequest.list_tools:type_name -> orchestra.plugin.v1.ListToolsRequest
-	16, // 6: orchestra.plugin.v1.PluginRequest.storage_read:type_name -> orchestra.plugin.v1.StorageReadRequest
-	18, // 7: orchestra.plugin.v1.PluginRequest.storage_write:type_name -> orchestra.plugin.v1.StorageWriteRequest
-	20, // 8: orchestra.plugin.v1.PluginRequest.storage_delete:type_name -> orchestra.plugin.v1.StorageDeleteRequest
-	22, // 9: orchestra.plugin.v1.PluginRequest.storage_list:type_name -> orchestra.plugin.v1.StorageListRequest
-	4,  // 10: orchestra.plugin.v1.PluginResponse.register:type_name -> orchestra.plugin.v1.RegistrationResult
-	6,  // 11: orchestra.plugin.v1.PluginResponse.boot:type_name -> orchestra.plugin.v1.BootResult
-	8,  // 12: orchestra.plugin.v1.PluginResponse.shutdown:type_name -> orchestra.plugin.v1.ShutdownResult
-	10, // 13: orchestra.plugin.v1.PluginResponse.health:type_name -> orchestra.plugin.v1.HealthResult
-	12, // 14: orchestra.plugin.v1.PluginResponse.tool_call:type_name -> orchestra.plugin.v1.ToolResponse
-	14, // 15: orchestra.plugin.v1.PluginResponse.list_tools:type_name -> orchestra.plugin.v1.ListToolsResponse
-	17, // 16: orchestra.plugin.v1.PluginResponse.storage_read:type_name -> orchestra.plugin.v1.StorageReadResponse
-	19, // 17: orchestra.plugin.v1.PluginResponse.storage_write:type_name -> orchestra.plugin.v1.StorageWriteResponse
-	21, // 18: orchestra.plugin.v1.PluginResponse.storage_delete:type_name -> orchestra.plugin.v1.StorageDeleteResponse
-	23, // 19: orchestra.plugin.v1.PluginResponse.storage_list:type_name -> orchestra.plugin.v1.StorageListResponse
-	25, // 20: orchestra.plugin.v1.PluginManifest.env:type_name -> orchestra.plugin.v1.PluginManifest.EnvEntry
-	26, // 21: orchestra.plugin.v1.BootRequest.config:type_name -> orchestra.plugin.v1.BootRequest.ConfigEntry
-	0,  // 22: orchestra.plugin.v1.HealthResult.status:type_name -> orchestra.plugin.v1.HealthResult.Status
-	27, // 23: orchestra.plugin.v1.HealthResult.details:type_name -> orchestra.plugin.v1.HealthResult.DetailsEntry
-	28, // 24: orchestra.plugin.v1.ToolRequest.arguments:type_name -> google.protobuf.Struct
-	28, // 25: orchestra.plugin.v1.ToolResponse.result:type_name -> google.protobuf.Struct
-	15, // 26: orchestra.plugin.v1.ListToolsResponse.tools:type_name -> orchestra.plugin.v1.ToolDefinition
-	28, // 27: orchestra.plugin.v1.ToolDefinition.input_schema:type_name -> google.protobuf.Struct
-	28, // 28: orchestra.plugin.v1.StorageReadResponse.metadata:type_name -> google.protobuf.Struct
-	28, // 29: orchestra.plugin.v1.StorageWriteRequest.metadata:type_name -> google.protobuf.Struct
-	24, // 30: orchestra.plugin.v1.StorageListResponse.entries:type_name -> orchestra.plugin.v1.StorageEntry
-	29, // 31: orchestra.plugin.v1.StorageEntry.modified_at:type_name -> google.protobuf.Timestamp
-	32, // [32:32] is the sub-list for method output_type
-	32, // [32:32] is the sub-list for method input_type
-	32, // [32:32] is the sub-list for extension type_name
-	32, // [32:32] is the sub-list for extension extendee
-	0,  // [0:32] is the sub-list for field type_name
+	18, // 6: orchestra.plugin.v1.PluginRequest.list_prompts:type_name -> orchestra.plugin.v1.ListPromptsRequest
+	16, // 7: orchestra.plugin.v1.PluginRequest.prompt_get:type_name -> orchestra.plugin.v1.PromptGetRequest
+	24, // 8: orchestra.plugin.v1.PluginRequest.storage_read:type_name -> orchestra.plugin.v1.StorageReadRequest
+	26, // 9: orchestra.plugin.v1.PluginRequest.storage_write:type_name -> orchestra.plugin.v1.StorageWriteRequest
+	28, // 10: orchestra.plugin.v1.PluginRequest.storage_delete:type_name -> orchestra.plugin.v1.StorageDeleteRequest
+	30, // 11: orchestra.plugin.v1.PluginRequest.storage_list:type_name -> orchestra.plugin.v1.StorageListRequest
+	4,  // 12: orchestra.plugin.v1.PluginResponse.register:type_name -> orchestra.plugin.v1.RegistrationResult
+	6,  // 13: orchestra.plugin.v1.PluginResponse.boot:type_name -> orchestra.plugin.v1.BootResult
+	8,  // 14: orchestra.plugin.v1.PluginResponse.shutdown:type_name -> orchestra.plugin.v1.ShutdownResult
+	10, // 15: orchestra.plugin.v1.PluginResponse.health:type_name -> orchestra.plugin.v1.HealthResult
+	12, // 16: orchestra.plugin.v1.PluginResponse.tool_call:type_name -> orchestra.plugin.v1.ToolResponse
+	14, // 17: orchestra.plugin.v1.PluginResponse.list_tools:type_name -> orchestra.plugin.v1.ListToolsResponse
+	19, // 18: orchestra.plugin.v1.PluginResponse.list_prompts:type_name -> orchestra.plugin.v1.ListPromptsResponse
+	17, // 19: orchestra.plugin.v1.PluginResponse.prompt_get:type_name -> orchestra.plugin.v1.PromptGetResponse
+	25, // 20: orchestra.plugin.v1.PluginResponse.storage_read:type_name -> orchestra.plugin.v1.StorageReadResponse
+	27, // 21: orchestra.plugin.v1.PluginResponse.storage_write:type_name -> orchestra.plugin.v1.StorageWriteResponse
+	29, // 22: orchestra.plugin.v1.PluginResponse.storage_delete:type_name -> orchestra.plugin.v1.StorageDeleteResponse
+	31, // 23: orchestra.plugin.v1.PluginResponse.storage_list:type_name -> orchestra.plugin.v1.StorageListResponse
+	33, // 24: orchestra.plugin.v1.PluginManifest.env:type_name -> orchestra.plugin.v1.PluginManifest.EnvEntry
+	34, // 25: orchestra.plugin.v1.BootRequest.config:type_name -> orchestra.plugin.v1.BootRequest.ConfigEntry
+	0,  // 26: orchestra.plugin.v1.HealthResult.status:type_name -> orchestra.plugin.v1.HealthResult.Status
+	35, // 27: orchestra.plugin.v1.HealthResult.details:type_name -> orchestra.plugin.v1.HealthResult.DetailsEntry
+	37, // 28: orchestra.plugin.v1.ToolRequest.arguments:type_name -> google.protobuf.Struct
+	37, // 29: orchestra.plugin.v1.ToolResponse.result:type_name -> google.protobuf.Struct
+	15, // 30: orchestra.plugin.v1.ListToolsResponse.tools:type_name -> orchestra.plugin.v1.ToolDefinition
+	37, // 31: orchestra.plugin.v1.ToolDefinition.input_schema:type_name -> google.protobuf.Struct
+	36, // 32: orchestra.plugin.v1.PromptGetRequest.arguments:type_name -> orchestra.plugin.v1.PromptGetRequest.ArgumentsEntry
+	22, // 33: orchestra.plugin.v1.PromptGetResponse.messages:type_name -> orchestra.plugin.v1.PromptMessage
+	20, // 34: orchestra.plugin.v1.ListPromptsResponse.prompts:type_name -> orchestra.plugin.v1.PromptDefinition
+	21, // 35: orchestra.plugin.v1.PromptDefinition.arguments:type_name -> orchestra.plugin.v1.PromptArgument
+	23, // 36: orchestra.plugin.v1.PromptMessage.content:type_name -> orchestra.plugin.v1.ContentBlock
+	37, // 37: orchestra.plugin.v1.StorageReadResponse.metadata:type_name -> google.protobuf.Struct
+	37, // 38: orchestra.plugin.v1.StorageWriteRequest.metadata:type_name -> google.protobuf.Struct
+	32, // 39: orchestra.plugin.v1.StorageListResponse.entries:type_name -> orchestra.plugin.v1.StorageEntry
+	38, // 40: orchestra.plugin.v1.StorageEntry.modified_at:type_name -> google.protobuf.Timestamp
+	41, // [41:41] is the sub-list for method output_type
+	41, // [41:41] is the sub-list for method input_type
+	41, // [41:41] is the sub-list for extension type_name
+	41, // [41:41] is the sub-list for extension extendee
+	0,  // [0:41] is the sub-list for field type_name
 }
 
 func init() { file_orchestra_plugin_v1_plugin_proto_init() }
@@ -2060,6 +2594,8 @@ func file_orchestra_plugin_v1_plugin_proto_init() {
 		(*PluginRequest_Health)(nil),
 		(*PluginRequest_ToolCall)(nil),
 		(*PluginRequest_ListTools)(nil),
+		(*PluginRequest_ListPrompts)(nil),
+		(*PluginRequest_PromptGet)(nil),
 		(*PluginRequest_StorageRead)(nil),
 		(*PluginRequest_StorageWrite)(nil),
 		(*PluginRequest_StorageDelete)(nil),
@@ -2072,6 +2608,8 @@ func file_orchestra_plugin_v1_plugin_proto_init() {
 		(*PluginResponse_Health)(nil),
 		(*PluginResponse_ToolCall)(nil),
 		(*PluginResponse_ListTools)(nil),
+		(*PluginResponse_ListPrompts)(nil),
+		(*PluginResponse_PromptGet)(nil),
 		(*PluginResponse_StorageRead)(nil),
 		(*PluginResponse_StorageWrite)(nil),
 		(*PluginResponse_StorageDelete)(nil),
@@ -2083,7 +2621,7 @@ func file_orchestra_plugin_v1_plugin_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_orchestra_plugin_v1_plugin_proto_rawDesc), len(file_orchestra_plugin_v1_plugin_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   27,
+			NumMessages:   36,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
