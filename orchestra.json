@@ -1,0 +1,19 @@
+{
+    "name": "orchestra-mcp/gen-go",
+    "description": "Generated Go code from Orchestra MCP Protobuf definitions.",
+    "type": "lib",
+    "license": "MIT",
+    "homepage": "https://orchestra-mcp.dev",
+    "support": {
+        "issues": "https://github.com/orchestra-mcp/gen-go/issues",
+        "source": "https://github.com/orchestra-mcp/gen-go"
+    },
+    "require": {
+        "orchestra-mcp/proto": "^0.1.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
