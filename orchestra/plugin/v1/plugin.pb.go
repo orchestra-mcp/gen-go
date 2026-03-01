@@ -92,6 +92,11 @@ type PluginRequest struct {
 	//	*PluginRequest_StorageWrite
 	//	*PluginRequest_StorageDelete
 	//	*PluginRequest_StorageList
+	//	*PluginRequest_StreamStart
+	//	*PluginRequest_StreamCancel
+	//	*PluginRequest_Subscribe
+	//	*PluginRequest_Unsubscribe
+	//	*PluginRequest_Publish
 	Request       isPluginRequest_Request `protobuf_oneof:"request"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -249,6 +254,51 @@ func (x *PluginRequest) GetStorageList() *StorageListRequest {
 	return nil
 }
 
+func (x *PluginRequest) GetStreamStart() *StreamStart {
+	if x != nil {
+		if x, ok := x.Request.(*PluginRequest_StreamStart); ok {
+			return x.StreamStart
+		}
+	}
+	return nil
+}
+
+func (x *PluginRequest) GetStreamCancel() *StreamCancel {
+	if x != nil {
+		if x, ok := x.Request.(*PluginRequest_StreamCancel); ok {
+			return x.StreamCancel
+		}
+	}
+	return nil
+}
+
+func (x *PluginRequest) GetSubscribe() *Subscribe {
+	if x != nil {
+		if x, ok := x.Request.(*PluginRequest_Subscribe); ok {
+			return x.Subscribe
+		}
+	}
+	return nil
+}
+
+func (x *PluginRequest) GetUnsubscribe() *Unsubscribe {
+	if x != nil {
+		if x, ok := x.Request.(*PluginRequest_Unsubscribe); ok {
+			return x.Unsubscribe
+		}
+	}
+	return nil
+}
+
+func (x *PluginRequest) GetPublish() *Publish {
+	if x != nil {
+		if x, ok := x.Request.(*PluginRequest_Publish); ok {
+			return x.Publish
+		}
+	}
+	return nil
+}
+
 type isPluginRequest_Request interface {
 	isPluginRequest_Request()
 }
@@ -305,6 +355,28 @@ type PluginRequest_StorageList struct {
 	StorageList *StorageListRequest `protobuf:"bytes,33,opt,name=storage_list,json=storageList,proto3,oneof"`
 }
 
+type PluginRequest_StreamStart struct {
+	// Streaming
+	StreamStart *StreamStart `protobuf:"bytes,40,opt,name=stream_start,json=streamStart,proto3,oneof"`
+}
+
+type PluginRequest_StreamCancel struct {
+	StreamCancel *StreamCancel `protobuf:"bytes,41,opt,name=stream_cancel,json=streamCancel,proto3,oneof"`
+}
+
+type PluginRequest_Subscribe struct {
+	// Events
+	Subscribe *Subscribe `protobuf:"bytes,50,opt,name=subscribe,proto3,oneof"`
+}
+
+type PluginRequest_Unsubscribe struct {
+	Unsubscribe *Unsubscribe `protobuf:"bytes,51,opt,name=unsubscribe,proto3,oneof"`
+}
+
+type PluginRequest_Publish struct {
+	Publish *Publish `protobuf:"bytes,52,opt,name=publish,proto3,oneof"`
+}
+
 func (*PluginRequest_Register) isPluginRequest_Request() {}
 
 func (*PluginRequest_Boot) isPluginRequest_Request() {}
@@ -329,6 +401,16 @@ func (*PluginRequest_StorageDelete) isPluginRequest_Request() {}
 
 func (*PluginRequest_StorageList) isPluginRequest_Request() {}
 
+func (*PluginRequest_StreamStart) isPluginRequest_Request() {}
+
+func (*PluginRequest_StreamCancel) isPluginRequest_Request() {}
+
+func (*PluginRequest_Subscribe) isPluginRequest_Request() {}
+
+func (*PluginRequest_Unsubscribe) isPluginRequest_Request() {}
+
+func (*PluginRequest_Publish) isPluginRequest_Request() {}
+
 type PluginResponse struct {
 	state     protoimpl.MessageState `protogen:"open.v1"`
 	RequestId string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
@@ -346,6 +428,9 @@ type PluginResponse struct {
 	//	*PluginResponse_StorageWrite
 	//	*PluginResponse_StorageDelete
 	//	*PluginResponse_StorageList
+	//	*PluginResponse_StreamChunk
+	//	*PluginResponse_StreamEnd
+	//	*PluginResponse_EventDelivery
 	Response      isPluginResponse_Response `protobuf_oneof:"response"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -503,6 +588,33 @@ func (x *PluginResponse) GetStorageList() *StorageListResponse {
 	return nil
 }
 
+func (x *PluginResponse) GetStreamChunk() *StreamChunk {
+	if x != nil {
+		if x, ok := x.Response.(*PluginResponse_StreamChunk); ok {
+			return x.StreamChunk
+		}
+	}
+	return nil
+}
+
+func (x *PluginResponse) GetStreamEnd() *StreamEnd {
+	if x != nil {
+		if x, ok := x.Response.(*PluginResponse_StreamEnd); ok {
+			return x.StreamEnd
+		}
+	}
+	return nil
+}
+
+func (x *PluginResponse) GetEventDelivery() *EventDelivery {
+	if x != nil {
+		if x, ok := x.Response.(*PluginResponse_EventDelivery); ok {
+			return x.EventDelivery
+		}
+	}
+	return nil
+}
+
 type isPluginResponse_Response interface {
 	isPluginResponse_Response()
 }
@@ -559,6 +671,20 @@ type PluginResponse_StorageList struct {
 	StorageList *StorageListResponse `protobuf:"bytes,33,opt,name=storage_list,json=storageList,proto3,oneof"`
 }
 
+type PluginResponse_StreamChunk struct {
+	// Streaming
+	StreamChunk *StreamChunk `protobuf:"bytes,40,opt,name=stream_chunk,json=streamChunk,proto3,oneof"`
+}
+
+type PluginResponse_StreamEnd struct {
+	StreamEnd *StreamEnd `protobuf:"bytes,41,opt,name=stream_end,json=streamEnd,proto3,oneof"`
+}
+
+type PluginResponse_EventDelivery struct {
+	// Events
+	EventDelivery *EventDelivery `protobuf:"bytes,50,opt,name=event_delivery,json=eventDelivery,proto3,oneof"`
+}
+
 func (*PluginResponse_Register) isPluginResponse_Response() {}
 
 func (*PluginResponse_Boot) isPluginResponse_Response() {}
@@ -582,6 +708,12 @@ func (*PluginResponse_StorageWrite) isPluginResponse_Response() {}
 func (*PluginResponse_StorageDelete) isPluginResponse_Response() {}
 
 func (*PluginResponse_StorageList) isPluginResponse_Response() {}
+
+func (*PluginResponse_StreamChunk) isPluginResponse_Response() {}
+
+func (*PluginResponse_StreamEnd) isPluginResponse_Response() {}
+
+func (*PluginResponse_EventDelivery) isPluginResponse_Response() {}
 
 type PluginManifest struct {
 	state    protoimpl.MessageState `protogen:"open.v1"`
@@ -1104,6 +1236,7 @@ type ToolRequest struct {
 	Arguments     *structpb.Struct       `protobuf:"bytes,2,opt,name=arguments,proto3" json:"arguments,omitempty"`
 	CallerPlugin  string                 `protobuf:"bytes,3,opt,name=caller_plugin,json=callerPlugin,proto3" json:"caller_plugin,omitempty"`
 	TraceParent   string                 `protobuf:"bytes,4,opt,name=trace_parent,json=traceParent,proto3" json:"trace_parent,omitempty"`
+	Provider      string                 `protobuf:"bytes,5,opt,name=provider,proto3" json:"provider,omitempty"` // AI provider for routing (e.g., "claude", "openai", "gemini", "ollama")
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1162,6 +1295,13 @@ func (x *ToolRequest) GetCallerPlugin() string {
 func (x *ToolRequest) GetTraceParent() string {
 	if x != nil {
 		return x.TraceParent
+	}
+	return ""
+}
+
+func (x *ToolRequest) GetProvider() string {
+	if x != nil {
+		return x.Provider
 	}
 	return ""
 }
@@ -2298,11 +2438,523 @@ func (x *StorageEntry) GetModifiedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+type StreamStart struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StreamId      string                 `protobuf:"bytes,1,opt,name=stream_id,json=streamId,proto3" json:"stream_id,omitempty"`             // UUIDv7 — correlates all chunks
+	ToolName      string                 `protobuf:"bytes,2,opt,name=tool_name,json=toolName,proto3" json:"tool_name,omitempty"`             // Tool to invoke in streaming mode
+	Arguments     *structpb.Struct       `protobuf:"bytes,3,opt,name=arguments,proto3" json:"arguments,omitempty"`                           // Tool arguments
+	CallerPlugin  string                 `protobuf:"bytes,4,opt,name=caller_plugin,json=callerPlugin,proto3" json:"caller_plugin,omitempty"` // Source plugin ID
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StreamStart) Reset() {
+	*x = StreamStart{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StreamStart) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StreamStart) ProtoMessage() {}
+
+func (x *StreamStart) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StreamStart.ProtoReflect.Descriptor instead.
+func (*StreamStart) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *StreamStart) GetStreamId() string {
+	if x != nil {
+		return x.StreamId
+	}
+	return ""
+}
+
+func (x *StreamStart) GetToolName() string {
+	if x != nil {
+		return x.ToolName
+	}
+	return ""
+}
+
+func (x *StreamStart) GetArguments() *structpb.Struct {
+	if x != nil {
+		return x.Arguments
+	}
+	return nil
+}
+
+func (x *StreamStart) GetCallerPlugin() string {
+	if x != nil {
+		return x.CallerPlugin
+	}
+	return ""
+}
+
+type StreamCancel struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StreamId      string                 `protobuf:"bytes,1,opt,name=stream_id,json=streamId,proto3" json:"stream_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StreamCancel) Reset() {
+	*x = StreamCancel{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StreamCancel) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StreamCancel) ProtoMessage() {}
+
+func (x *StreamCancel) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StreamCancel.ProtoReflect.Descriptor instead.
+func (*StreamCancel) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *StreamCancel) GetStreamId() string {
+	if x != nil {
+		return x.StreamId
+	}
+	return ""
+}
+
+type StreamChunk struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StreamId      string                 `protobuf:"bytes,1,opt,name=stream_id,json=streamId,proto3" json:"stream_id,omitempty"`
+	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`                                  // Chunk payload (text, JSON, binary)
+	ContentType   string                 `protobuf:"bytes,3,opt,name=content_type,json=contentType,proto3" json:"content_type,omitempty"` // "text/plain", "application/json", etc.
+	Sequence      int64                  `protobuf:"varint,4,opt,name=sequence,proto3" json:"sequence,omitempty"`                         // 0-based chunk index
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StreamChunk) Reset() {
+	*x = StreamChunk{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StreamChunk) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StreamChunk) ProtoMessage() {}
+
+func (x *StreamChunk) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StreamChunk.ProtoReflect.Descriptor instead.
+func (*StreamChunk) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *StreamChunk) GetStreamId() string {
+	if x != nil {
+		return x.StreamId
+	}
+	return ""
+}
+
+func (x *StreamChunk) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *StreamChunk) GetContentType() string {
+	if x != nil {
+		return x.ContentType
+	}
+	return ""
+}
+
+func (x *StreamChunk) GetSequence() int64 {
+	if x != nil {
+		return x.Sequence
+	}
+	return 0
+}
+
+type StreamEnd struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StreamId      string                 `protobuf:"bytes,1,opt,name=stream_id,json=streamId,proto3" json:"stream_id,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	TotalChunks   int64                  `protobuf:"varint,5,opt,name=total_chunks,json=totalChunks,proto3" json:"total_chunks,omitempty"` // Total chunks sent
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StreamEnd) Reset() {
+	*x = StreamEnd{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[35]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StreamEnd) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StreamEnd) ProtoMessage() {}
+
+func (x *StreamEnd) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[35]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StreamEnd.ProtoReflect.Descriptor instead.
+func (*StreamEnd) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *StreamEnd) GetStreamId() string {
+	if x != nil {
+		return x.StreamId
+	}
+	return ""
+}
+
+func (x *StreamEnd) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *StreamEnd) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *StreamEnd) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *StreamEnd) GetTotalChunks() int64 {
+	if x != nil {
+		return x.TotalChunks
+	}
+	return 0
+}
+
+type Subscribe struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	SubscriptionId string                 `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`                                       // UUIDv7 — unique per subscription
+	Topic          string                 `protobuf:"bytes,2,opt,name=topic,proto3" json:"topic,omitempty"`                                                                               // "feature.updated", "build.completed", etc.
+	Filters        map[string]string      `protobuf:"bytes,3,rep,name=filters,proto3" json:"filters,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Optional key=value filters on payload
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *Subscribe) Reset() {
+	*x = Subscribe{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Subscribe) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Subscribe) ProtoMessage() {}
+
+func (x *Subscribe) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Subscribe.ProtoReflect.Descriptor instead.
+func (*Subscribe) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *Subscribe) GetSubscriptionId() string {
+	if x != nil {
+		return x.SubscriptionId
+	}
+	return ""
+}
+
+func (x *Subscribe) GetTopic() string {
+	if x != nil {
+		return x.Topic
+	}
+	return ""
+}
+
+func (x *Subscribe) GetFilters() map[string]string {
+	if x != nil {
+		return x.Filters
+	}
+	return nil
+}
+
+type Unsubscribe struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	SubscriptionId string                 `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *Unsubscribe) Reset() {
+	*x = Unsubscribe{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Unsubscribe) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Unsubscribe) ProtoMessage() {}
+
+func (x *Unsubscribe) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Unsubscribe.ProtoReflect.Descriptor instead.
+func (*Unsubscribe) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *Unsubscribe) GetSubscriptionId() string {
+	if x != nil {
+		return x.SubscriptionId
+	}
+	return ""
+}
+
+type Publish struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Topic         string                 `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`                                   // Event topic
+	EventType     string                 `protobuf:"bytes,2,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`          // Specific event type within topic
+	Payload       *structpb.Struct       `protobuf:"bytes,3,opt,name=payload,proto3" json:"payload,omitempty"`                               // Event data
+	SourcePlugin  string                 `protobuf:"bytes,4,opt,name=source_plugin,json=sourcePlugin,proto3" json:"source_plugin,omitempty"` // Publisher plugin ID
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Publish) Reset() {
+	*x = Publish{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Publish) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Publish) ProtoMessage() {}
+
+func (x *Publish) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Publish.ProtoReflect.Descriptor instead.
+func (*Publish) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *Publish) GetTopic() string {
+	if x != nil {
+		return x.Topic
+	}
+	return ""
+}
+
+func (x *Publish) GetEventType() string {
+	if x != nil {
+		return x.EventType
+	}
+	return ""
+}
+
+func (x *Publish) GetPayload() *structpb.Struct {
+	if x != nil {
+		return x.Payload
+	}
+	return nil
+}
+
+func (x *Publish) GetSourcePlugin() string {
+	if x != nil {
+		return x.SourcePlugin
+	}
+	return ""
+}
+
+type EventDelivery struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	SubscriptionId string                 `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"` // Which subscription matched
+	Topic          string                 `protobuf:"bytes,2,opt,name=topic,proto3" json:"topic,omitempty"`
+	EventType      string                 `protobuf:"bytes,3,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`
+	Payload        *structpb.Struct       `protobuf:"bytes,4,opt,name=payload,proto3" json:"payload,omitempty"`
+	SourcePlugin   string                 `protobuf:"bytes,5,opt,name=source_plugin,json=sourcePlugin,proto3" json:"source_plugin,omitempty"` // Who published
+	Timestamp      *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *EventDelivery) Reset() {
+	*x = EventDelivery{}
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EventDelivery) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EventDelivery) ProtoMessage() {}
+
+func (x *EventDelivery) ProtoReflect() protoreflect.Message {
+	mi := &file_orchestra_plugin_v1_plugin_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EventDelivery.ProtoReflect.Descriptor instead.
+func (*EventDelivery) Descriptor() ([]byte, []int) {
+	return file_orchestra_plugin_v1_plugin_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *EventDelivery) GetSubscriptionId() string {
+	if x != nil {
+		return x.SubscriptionId
+	}
+	return ""
+}
+
+func (x *EventDelivery) GetTopic() string {
+	if x != nil {
+		return x.Topic
+	}
+	return ""
+}
+
+func (x *EventDelivery) GetEventType() string {
+	if x != nil {
+		return x.EventType
+	}
+	return ""
+}
+
+func (x *EventDelivery) GetPayload() *structpb.Struct {
+	if x != nil {
+		return x.Payload
+	}
+	return nil
+}
+
+func (x *EventDelivery) GetSourcePlugin() string {
+	if x != nil {
+		return x.SourcePlugin
+	}
+	return ""
+}
+
+func (x *EventDelivery) GetTimestamp() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Timestamp
+	}
+	return nil
+}
+
 var File_orchestra_plugin_v1_plugin_proto protoreflect.FileDescriptor
 
 const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\n" +
-	" orchestra/plugin/v1/plugin.proto\x12\x13orchestra.plugin.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x96\a\n" +
+	" orchestra/plugin/v1/plugin.proto\x12\x13orchestra.plugin.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe7\t\n" +
 	"\rPluginRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12A\n" +
@@ -2320,8 +2972,13 @@ const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\fstorage_read\x18\x1e \x01(\v2'.orchestra.plugin.v1.StorageReadRequestH\x00R\vstorageRead\x12O\n" +
 	"\rstorage_write\x18\x1f \x01(\v2(.orchestra.plugin.v1.StorageWriteRequestH\x00R\fstorageWrite\x12R\n" +
 	"\x0estorage_delete\x18  \x01(\v2).orchestra.plugin.v1.StorageDeleteRequestH\x00R\rstorageDelete\x12L\n" +
-	"\fstorage_list\x18! \x01(\v2'.orchestra.plugin.v1.StorageListRequestH\x00R\vstorageListB\t\n" +
-	"\arequest\"\xa1\a\n" +
+	"\fstorage_list\x18! \x01(\v2'.orchestra.plugin.v1.StorageListRequestH\x00R\vstorageList\x12E\n" +
+	"\fstream_start\x18( \x01(\v2 .orchestra.plugin.v1.StreamStartH\x00R\vstreamStart\x12H\n" +
+	"\rstream_cancel\x18) \x01(\v2!.orchestra.plugin.v1.StreamCancelH\x00R\fstreamCancel\x12>\n" +
+	"\tsubscribe\x182 \x01(\v2\x1e.orchestra.plugin.v1.SubscribeH\x00R\tsubscribe\x12D\n" +
+	"\vunsubscribe\x183 \x01(\v2 .orchestra.plugin.v1.UnsubscribeH\x00R\vunsubscribe\x128\n" +
+	"\apublish\x184 \x01(\v2\x1c.orchestra.plugin.v1.PublishH\x00R\apublishB\t\n" +
+	"\arequest\"\xf6\b\n" +
 	"\x0ePluginResponse\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12E\n" +
@@ -2339,7 +2996,11 @@ const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\fstorage_read\x18\x1e \x01(\v2(.orchestra.plugin.v1.StorageReadResponseH\x00R\vstorageRead\x12P\n" +
 	"\rstorage_write\x18\x1f \x01(\v2).orchestra.plugin.v1.StorageWriteResponseH\x00R\fstorageWrite\x12S\n" +
 	"\x0estorage_delete\x18  \x01(\v2*.orchestra.plugin.v1.StorageDeleteResponseH\x00R\rstorageDelete\x12M\n" +
-	"\fstorage_list\x18! \x01(\v2(.orchestra.plugin.v1.StorageListResponseH\x00R\vstorageListB\n" +
+	"\fstorage_list\x18! \x01(\v2(.orchestra.plugin.v1.StorageListResponseH\x00R\vstorageList\x12E\n" +
+	"\fstream_chunk\x18( \x01(\v2 .orchestra.plugin.v1.StreamChunkH\x00R\vstreamChunk\x12?\n" +
+	"\n" +
+	"stream_end\x18) \x01(\v2\x1e.orchestra.plugin.v1.StreamEndH\x00R\tstreamEnd\x12K\n" +
+	"\x0eevent_delivery\x182 \x01(\v2\".orchestra.plugin.v1.EventDeliveryH\x00R\reventDeliveryB\n" +
 	"\n" +
 	"\bresponse\"\xae\x05\n" +
 	"\x0ePluginManifest\x12\x0e\n" +
@@ -2395,12 +3056,13 @@ const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\x12STATUS_UNSPECIFIED\x10\x00\x12\x12\n" +
 	"\x0eSTATUS_HEALTHY\x10\x01\x12\x13\n" +
 	"\x0fSTATUS_DEGRADED\x10\x02\x12\x14\n" +
-	"\x10STATUS_UNHEALTHY\x10\x03\"\xa9\x01\n" +
+	"\x10STATUS_UNHEALTHY\x10\x03\"\xc5\x01\n" +
 	"\vToolRequest\x12\x1b\n" +
 	"\ttool_name\x18\x01 \x01(\tR\btoolName\x125\n" +
 	"\targuments\x18\x02 \x01(\v2\x17.google.protobuf.StructR\targuments\x12#\n" +
 	"\rcaller_plugin\x18\x03 \x01(\tR\fcallerPlugin\x12!\n" +
-	"\ftrace_parent\x18\x04 \x01(\tR\vtraceParent\"\x9d\x01\n" +
+	"\ftrace_parent\x18\x04 \x01(\tR\vtraceParent\x12\x1a\n" +
+	"\bprovider\x18\x05 \x01(\tR\bprovider\"\x9d\x01\n" +
 	"\fToolResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12/\n" +
 	"\x06result\x18\x02 \x01(\v2\x17.google.protobuf.StructR\x06result\x12\x1d\n" +
@@ -2475,7 +3137,49 @@ const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\x04size\x18\x02 \x01(\x03R\x04size\x12\x18\n" +
 	"\aversion\x18\x03 \x01(\x03R\aversion\x12;\n" +
 	"\vmodified_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"modifiedAtB\xd2\x01\n" +
+	"modifiedAt\"\xa3\x01\n" +
+	"\vStreamStart\x12\x1b\n" +
+	"\tstream_id\x18\x01 \x01(\tR\bstreamId\x12\x1b\n" +
+	"\ttool_name\x18\x02 \x01(\tR\btoolName\x125\n" +
+	"\targuments\x18\x03 \x01(\v2\x17.google.protobuf.StructR\targuments\x12#\n" +
+	"\rcaller_plugin\x18\x04 \x01(\tR\fcallerPlugin\"+\n" +
+	"\fStreamCancel\x12\x1b\n" +
+	"\tstream_id\x18\x01 \x01(\tR\bstreamId\"}\n" +
+	"\vStreamChunk\x12\x1b\n" +
+	"\tstream_id\x18\x01 \x01(\tR\bstreamId\x12\x12\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\x12!\n" +
+	"\fcontent_type\x18\x03 \x01(\tR\vcontentType\x12\x1a\n" +
+	"\bsequence\x18\x04 \x01(\x03R\bsequence\"\xa9\x01\n" +
+	"\tStreamEnd\x12\x1b\n" +
+	"\tstream_id\x18\x01 \x01(\tR\bstreamId\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\x12!\n" +
+	"\ftotal_chunks\x18\x05 \x01(\x03R\vtotalChunks\"\xcd\x01\n" +
+	"\tSubscribe\x12'\n" +
+	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12\x14\n" +
+	"\x05topic\x18\x02 \x01(\tR\x05topic\x12E\n" +
+	"\afilters\x18\x03 \x03(\v2+.orchestra.plugin.v1.Subscribe.FiltersEntryR\afilters\x1a:\n" +
+	"\fFiltersEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"6\n" +
+	"\vUnsubscribe\x12'\n" +
+	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\"\x96\x01\n" +
+	"\aPublish\x12\x14\n" +
+	"\x05topic\x18\x01 \x01(\tR\x05topic\x12\x1d\n" +
+	"\n" +
+	"event_type\x18\x02 \x01(\tR\teventType\x121\n" +
+	"\apayload\x18\x03 \x01(\v2\x17.google.protobuf.StructR\apayload\x12#\n" +
+	"\rsource_plugin\x18\x04 \x01(\tR\fsourcePlugin\"\xff\x01\n" +
+	"\rEventDelivery\x12'\n" +
+	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12\x14\n" +
+	"\x05topic\x18\x02 \x01(\tR\x05topic\x12\x1d\n" +
+	"\n" +
+	"event_type\x18\x03 \x01(\tR\teventType\x121\n" +
+	"\apayload\x18\x04 \x01(\v2\x17.google.protobuf.StructR\apayload\x12#\n" +
+	"\rsource_plugin\x18\x05 \x01(\tR\fsourcePlugin\x128\n" +
+	"\ttimestamp\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestampB\xd2\x01\n" +
 	"\x17com.orchestra.plugin.v1B\vPluginProtoP\x01Z<github.com/orchestra-mcp/gen-go/orchestra/plugin/v1;pluginv1\xa2\x02\x03OPX\xaa\x02\x13Orchestra.Plugin.V1\xca\x02\x13Orchestra\\Plugin\\V1\xe2\x02\x1fOrchestra\\Plugin\\V1\\GPBMetadata\xea\x02\x15Orchestra::Plugin::V1b\x06proto3"
 
 var (
@@ -2491,7 +3195,7 @@ func file_orchestra_plugin_v1_plugin_proto_rawDescGZIP() []byte {
 }
 
 var file_orchestra_plugin_v1_plugin_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_orchestra_plugin_v1_plugin_proto_msgTypes = make([]protoimpl.MessageInfo, 36)
+var file_orchestra_plugin_v1_plugin_proto_msgTypes = make([]protoimpl.MessageInfo, 45)
 var file_orchestra_plugin_v1_plugin_proto_goTypes = []any{
 	(HealthResult_Status)(0),      // 0: orchestra.plugin.v1.HealthResult.Status
 	(*PluginRequest)(nil),         // 1: orchestra.plugin.v1.PluginRequest
@@ -2526,12 +3230,21 @@ var file_orchestra_plugin_v1_plugin_proto_goTypes = []any{
 	(*StorageListRequest)(nil),    // 30: orchestra.plugin.v1.StorageListRequest
 	(*StorageListResponse)(nil),   // 31: orchestra.plugin.v1.StorageListResponse
 	(*StorageEntry)(nil),          // 32: orchestra.plugin.v1.StorageEntry
-	nil,                           // 33: orchestra.plugin.v1.PluginManifest.EnvEntry
-	nil,                           // 34: orchestra.plugin.v1.BootRequest.ConfigEntry
-	nil,                           // 35: orchestra.plugin.v1.HealthResult.DetailsEntry
-	nil,                           // 36: orchestra.plugin.v1.PromptGetRequest.ArgumentsEntry
-	(*structpb.Struct)(nil),       // 37: google.protobuf.Struct
-	(*timestamppb.Timestamp)(nil), // 38: google.protobuf.Timestamp
+	(*StreamStart)(nil),           // 33: orchestra.plugin.v1.StreamStart
+	(*StreamCancel)(nil),          // 34: orchestra.plugin.v1.StreamCancel
+	(*StreamChunk)(nil),           // 35: orchestra.plugin.v1.StreamChunk
+	(*StreamEnd)(nil),             // 36: orchestra.plugin.v1.StreamEnd
+	(*Subscribe)(nil),             // 37: orchestra.plugin.v1.Subscribe
+	(*Unsubscribe)(nil),           // 38: orchestra.plugin.v1.Unsubscribe
+	(*Publish)(nil),               // 39: orchestra.plugin.v1.Publish
+	(*EventDelivery)(nil),         // 40: orchestra.plugin.v1.EventDelivery
+	nil,                           // 41: orchestra.plugin.v1.PluginManifest.EnvEntry
+	nil,                           // 42: orchestra.plugin.v1.BootRequest.ConfigEntry
+	nil,                           // 43: orchestra.plugin.v1.HealthResult.DetailsEntry
+	nil,                           // 44: orchestra.plugin.v1.PromptGetRequest.ArgumentsEntry
+	nil,                           // 45: orchestra.plugin.v1.Subscribe.FiltersEntry
+	(*structpb.Struct)(nil),       // 46: google.protobuf.Struct
+	(*timestamppb.Timestamp)(nil), // 47: google.protobuf.Timestamp
 }
 var file_orchestra_plugin_v1_plugin_proto_depIdxs = []int32{
 	3,  // 0: orchestra.plugin.v1.PluginRequest.register:type_name -> orchestra.plugin.v1.PluginManifest
@@ -2546,40 +3259,53 @@ var file_orchestra_plugin_v1_plugin_proto_depIdxs = []int32{
 	26, // 9: orchestra.plugin.v1.PluginRequest.storage_write:type_name -> orchestra.plugin.v1.StorageWriteRequest
 	28, // 10: orchestra.plugin.v1.PluginRequest.storage_delete:type_name -> orchestra.plugin.v1.StorageDeleteRequest
 	30, // 11: orchestra.plugin.v1.PluginRequest.storage_list:type_name -> orchestra.plugin.v1.StorageListRequest
-	4,  // 12: orchestra.plugin.v1.PluginResponse.register:type_name -> orchestra.plugin.v1.RegistrationResult
-	6,  // 13: orchestra.plugin.v1.PluginResponse.boot:type_name -> orchestra.plugin.v1.BootResult
-	8,  // 14: orchestra.plugin.v1.PluginResponse.shutdown:type_name -> orchestra.plugin.v1.ShutdownResult
-	10, // 15: orchestra.plugin.v1.PluginResponse.health:type_name -> orchestra.plugin.v1.HealthResult
-	12, // 16: orchestra.plugin.v1.PluginResponse.tool_call:type_name -> orchestra.plugin.v1.ToolResponse
-	14, // 17: orchestra.plugin.v1.PluginResponse.list_tools:type_name -> orchestra.plugin.v1.ListToolsResponse
-	19, // 18: orchestra.plugin.v1.PluginResponse.list_prompts:type_name -> orchestra.plugin.v1.ListPromptsResponse
-	17, // 19: orchestra.plugin.v1.PluginResponse.prompt_get:type_name -> orchestra.plugin.v1.PromptGetResponse
-	25, // 20: orchestra.plugin.v1.PluginResponse.storage_read:type_name -> orchestra.plugin.v1.StorageReadResponse
-	27, // 21: orchestra.plugin.v1.PluginResponse.storage_write:type_name -> orchestra.plugin.v1.StorageWriteResponse
-	29, // 22: orchestra.plugin.v1.PluginResponse.storage_delete:type_name -> orchestra.plugin.v1.StorageDeleteResponse
-	31, // 23: orchestra.plugin.v1.PluginResponse.storage_list:type_name -> orchestra.plugin.v1.StorageListResponse
-	33, // 24: orchestra.plugin.v1.PluginManifest.env:type_name -> orchestra.plugin.v1.PluginManifest.EnvEntry
-	34, // 25: orchestra.plugin.v1.BootRequest.config:type_name -> orchestra.plugin.v1.BootRequest.ConfigEntry
-	0,  // 26: orchestra.plugin.v1.HealthResult.status:type_name -> orchestra.plugin.v1.HealthResult.Status
-	35, // 27: orchestra.plugin.v1.HealthResult.details:type_name -> orchestra.plugin.v1.HealthResult.DetailsEntry
-	37, // 28: orchestra.plugin.v1.ToolRequest.arguments:type_name -> google.protobuf.Struct
-	37, // 29: orchestra.plugin.v1.ToolResponse.result:type_name -> google.protobuf.Struct
-	15, // 30: orchestra.plugin.v1.ListToolsResponse.tools:type_name -> orchestra.plugin.v1.ToolDefinition
-	37, // 31: orchestra.plugin.v1.ToolDefinition.input_schema:type_name -> google.protobuf.Struct
-	36, // 32: orchestra.plugin.v1.PromptGetRequest.arguments:type_name -> orchestra.plugin.v1.PromptGetRequest.ArgumentsEntry
-	22, // 33: orchestra.plugin.v1.PromptGetResponse.messages:type_name -> orchestra.plugin.v1.PromptMessage
-	20, // 34: orchestra.plugin.v1.ListPromptsResponse.prompts:type_name -> orchestra.plugin.v1.PromptDefinition
-	21, // 35: orchestra.plugin.v1.PromptDefinition.arguments:type_name -> orchestra.plugin.v1.PromptArgument
-	23, // 36: orchestra.plugin.v1.PromptMessage.content:type_name -> orchestra.plugin.v1.ContentBlock
-	37, // 37: orchestra.plugin.v1.StorageReadResponse.metadata:type_name -> google.protobuf.Struct
-	37, // 38: orchestra.plugin.v1.StorageWriteRequest.metadata:type_name -> google.protobuf.Struct
-	32, // 39: orchestra.plugin.v1.StorageListResponse.entries:type_name -> orchestra.plugin.v1.StorageEntry
-	38, // 40: orchestra.plugin.v1.StorageEntry.modified_at:type_name -> google.protobuf.Timestamp
-	41, // [41:41] is the sub-list for method output_type
-	41, // [41:41] is the sub-list for method input_type
-	41, // [41:41] is the sub-list for extension type_name
-	41, // [41:41] is the sub-list for extension extendee
-	0,  // [0:41] is the sub-list for field type_name
+	33, // 12: orchestra.plugin.v1.PluginRequest.stream_start:type_name -> orchestra.plugin.v1.StreamStart
+	34, // 13: orchestra.plugin.v1.PluginRequest.stream_cancel:type_name -> orchestra.plugin.v1.StreamCancel
+	37, // 14: orchestra.plugin.v1.PluginRequest.subscribe:type_name -> orchestra.plugin.v1.Subscribe
+	38, // 15: orchestra.plugin.v1.PluginRequest.unsubscribe:type_name -> orchestra.plugin.v1.Unsubscribe
+	39, // 16: orchestra.plugin.v1.PluginRequest.publish:type_name -> orchestra.plugin.v1.Publish
+	4,  // 17: orchestra.plugin.v1.PluginResponse.register:type_name -> orchestra.plugin.v1.RegistrationResult
+	6,  // 18: orchestra.plugin.v1.PluginResponse.boot:type_name -> orchestra.plugin.v1.BootResult
+	8,  // 19: orchestra.plugin.v1.PluginResponse.shutdown:type_name -> orchestra.plugin.v1.ShutdownResult
+	10, // 20: orchestra.plugin.v1.PluginResponse.health:type_name -> orchestra.plugin.v1.HealthResult
+	12, // 21: orchestra.plugin.v1.PluginResponse.tool_call:type_name -> orchestra.plugin.v1.ToolResponse
+	14, // 22: orchestra.plugin.v1.PluginResponse.list_tools:type_name -> orchestra.plugin.v1.ListToolsResponse
+	19, // 23: orchestra.plugin.v1.PluginResponse.list_prompts:type_name -> orchestra.plugin.v1.ListPromptsResponse
+	17, // 24: orchestra.plugin.v1.PluginResponse.prompt_get:type_name -> orchestra.plugin.v1.PromptGetResponse
+	25, // 25: orchestra.plugin.v1.PluginResponse.storage_read:type_name -> orchestra.plugin.v1.StorageReadResponse
+	27, // 26: orchestra.plugin.v1.PluginResponse.storage_write:type_name -> orchestra.plugin.v1.StorageWriteResponse
+	29, // 27: orchestra.plugin.v1.PluginResponse.storage_delete:type_name -> orchestra.plugin.v1.StorageDeleteResponse
+	31, // 28: orchestra.plugin.v1.PluginResponse.storage_list:type_name -> orchestra.plugin.v1.StorageListResponse
+	35, // 29: orchestra.plugin.v1.PluginResponse.stream_chunk:type_name -> orchestra.plugin.v1.StreamChunk
+	36, // 30: orchestra.plugin.v1.PluginResponse.stream_end:type_name -> orchestra.plugin.v1.StreamEnd
+	40, // 31: orchestra.plugin.v1.PluginResponse.event_delivery:type_name -> orchestra.plugin.v1.EventDelivery
+	41, // 32: orchestra.plugin.v1.PluginManifest.env:type_name -> orchestra.plugin.v1.PluginManifest.EnvEntry
+	42, // 33: orchestra.plugin.v1.BootRequest.config:type_name -> orchestra.plugin.v1.BootRequest.ConfigEntry
+	0,  // 34: orchestra.plugin.v1.HealthResult.status:type_name -> orchestra.plugin.v1.HealthResult.Status
+	43, // 35: orchestra.plugin.v1.HealthResult.details:type_name -> orchestra.plugin.v1.HealthResult.DetailsEntry
+	46, // 36: orchestra.plugin.v1.ToolRequest.arguments:type_name -> google.protobuf.Struct
+	46, // 37: orchestra.plugin.v1.ToolResponse.result:type_name -> google.protobuf.Struct
+	15, // 38: orchestra.plugin.v1.ListToolsResponse.tools:type_name -> orchestra.plugin.v1.ToolDefinition
+	46, // 39: orchestra.plugin.v1.ToolDefinition.input_schema:type_name -> google.protobuf.Struct
+	44, // 40: orchestra.plugin.v1.PromptGetRequest.arguments:type_name -> orchestra.plugin.v1.PromptGetRequest.ArgumentsEntry
+	22, // 41: orchestra.plugin.v1.PromptGetResponse.messages:type_name -> orchestra.plugin.v1.PromptMessage
+	20, // 42: orchestra.plugin.v1.ListPromptsResponse.prompts:type_name -> orchestra.plugin.v1.PromptDefinition
+	21, // 43: orchestra.plugin.v1.PromptDefinition.arguments:type_name -> orchestra.plugin.v1.PromptArgument
+	23, // 44: orchestra.plugin.v1.PromptMessage.content:type_name -> orchestra.plugin.v1.ContentBlock
+	46, // 45: orchestra.plugin.v1.StorageReadResponse.metadata:type_name -> google.protobuf.Struct
+	46, // 46: orchestra.plugin.v1.StorageWriteRequest.metadata:type_name -> google.protobuf.Struct
+	32, // 47: orchestra.plugin.v1.StorageListResponse.entries:type_name -> orchestra.plugin.v1.StorageEntry
+	47, // 48: orchestra.plugin.v1.StorageEntry.modified_at:type_name -> google.protobuf.Timestamp
+	46, // 49: orchestra.plugin.v1.StreamStart.arguments:type_name -> google.protobuf.Struct
+	45, // 50: orchestra.plugin.v1.Subscribe.filters:type_name -> orchestra.plugin.v1.Subscribe.FiltersEntry
+	46, // 51: orchestra.plugin.v1.Publish.payload:type_name -> google.protobuf.Struct
+	46, // 52: orchestra.plugin.v1.EventDelivery.payload:type_name -> google.protobuf.Struct
+	47, // 53: orchestra.plugin.v1.EventDelivery.timestamp:type_name -> google.protobuf.Timestamp
+	54, // [54:54] is the sub-list for method output_type
+	54, // [54:54] is the sub-list for method input_type
+	54, // [54:54] is the sub-list for extension type_name
+	54, // [54:54] is the sub-list for extension extendee
+	0,  // [0:54] is the sub-list for field type_name
 }
 
 func init() { file_orchestra_plugin_v1_plugin_proto_init() }
@@ -2600,6 +3326,11 @@ func file_orchestra_plugin_v1_plugin_proto_init() {
 		(*PluginRequest_StorageWrite)(nil),
 		(*PluginRequest_StorageDelete)(nil),
 		(*PluginRequest_StorageList)(nil),
+		(*PluginRequest_StreamStart)(nil),
+		(*PluginRequest_StreamCancel)(nil),
+		(*PluginRequest_Subscribe)(nil),
+		(*PluginRequest_Unsubscribe)(nil),
+		(*PluginRequest_Publish)(nil),
 	}
 	file_orchestra_plugin_v1_plugin_proto_msgTypes[1].OneofWrappers = []any{
 		(*PluginResponse_Register)(nil),
@@ -2614,6 +3345,9 @@ func file_orchestra_plugin_v1_plugin_proto_init() {
 		(*PluginResponse_StorageWrite)(nil),
 		(*PluginResponse_StorageDelete)(nil),
 		(*PluginResponse_StorageList)(nil),
+		(*PluginResponse_StreamChunk)(nil),
+		(*PluginResponse_StreamEnd)(nil),
+		(*PluginResponse_EventDelivery)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2621,7 +3355,7 @@ func file_orchestra_plugin_v1_plugin_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_orchestra_plugin_v1_plugin_proto_rawDesc), len(file_orchestra_plugin_v1_plugin_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   36,
+			NumMessages:   45,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
