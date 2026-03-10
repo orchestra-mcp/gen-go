@@ -1236,7 +1236,8 @@ type ToolRequest struct {
 	Arguments     *structpb.Struct       `protobuf:"bytes,2,opt,name=arguments,proto3" json:"arguments,omitempty"`
 	CallerPlugin  string                 `protobuf:"bytes,3,opt,name=caller_plugin,json=callerPlugin,proto3" json:"caller_plugin,omitempty"`
 	TraceParent   string                 `protobuf:"bytes,4,opt,name=trace_parent,json=traceParent,proto3" json:"trace_parent,omitempty"`
-	Provider      string                 `protobuf:"bytes,5,opt,name=provider,proto3" json:"provider,omitempty"` // AI provider for routing (e.g., "claude", "openai", "gemini", "ollama")
+	Provider      string                 `protobuf:"bytes,5,opt,name=provider,proto3" json:"provider,omitempty"`                    // AI provider for routing (e.g., "claude", "openai", "gemini", "ollama")
+	SessionId     string                 `protobuf:"bytes,6,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"` // MCP session ID (auto-injected by transport for feature locking)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1302,6 +1303,13 @@ func (x *ToolRequest) GetTraceParent() string {
 func (x *ToolRequest) GetProvider() string {
 	if x != nil {
 		return x.Provider
+	}
+	return ""
+}
+
+func (x *ToolRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -3056,13 +3064,15 @@ const file_orchestra_plugin_v1_plugin_proto_rawDesc = "" +
 	"\x12STATUS_UNSPECIFIED\x10\x00\x12\x12\n" +
 	"\x0eSTATUS_HEALTHY\x10\x01\x12\x13\n" +
 	"\x0fSTATUS_DEGRADED\x10\x02\x12\x14\n" +
-	"\x10STATUS_UNHEALTHY\x10\x03\"\xc5\x01\n" +
+	"\x10STATUS_UNHEALTHY\x10\x03\"\xe4\x01\n" +
 	"\vToolRequest\x12\x1b\n" +
 	"\ttool_name\x18\x01 \x01(\tR\btoolName\x125\n" +
 	"\targuments\x18\x02 \x01(\v2\x17.google.protobuf.StructR\targuments\x12#\n" +
 	"\rcaller_plugin\x18\x03 \x01(\tR\fcallerPlugin\x12!\n" +
 	"\ftrace_parent\x18\x04 \x01(\tR\vtraceParent\x12\x1a\n" +
-	"\bprovider\x18\x05 \x01(\tR\bprovider\"\x9d\x01\n" +
+	"\bprovider\x18\x05 \x01(\tR\bprovider\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x06 \x01(\tR\tsessionId\"\x9d\x01\n" +
 	"\fToolResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12/\n" +
 	"\x06result\x18\x02 \x01(\v2\x17.google.protobuf.StructR\x06result\x12\x1d\n" +
